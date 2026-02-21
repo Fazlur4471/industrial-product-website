@@ -89,7 +89,14 @@ export async function POST(request: Request) {
     return Response.json({ error: 'Invalid product payload' }, { status: 400 })
   }
 
-  const { data, error } = await supabase.from('products').insert([payload]).select().single()
+  let { data, error } = await supabase.from('products').insert([payload]).select().single()
+
+  if (error?.code === '42703' && error.message.includes('featured')) {
+    const { featured: _featured, ...withoutFeatured } = payload
+    const retry = await supabase.from('products').insert([withoutFeatured]).select().single()
+    data = retry.data
+    error = retry.error
+  }
 
   if (error) {
     return Response.json({ error: error.message }, { status: 400 })

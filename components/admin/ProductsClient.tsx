@@ -56,7 +56,7 @@ function productToForm(product: Product): ProductFormState {
     imagesText: product.images.join('\n'),
     specsText: JSON.stringify(product.specs ?? {}, null, 2),
     inStock: product.inStock,
-    featured: product.featured,
+    featured: product.featured === true,
   }
 }
 

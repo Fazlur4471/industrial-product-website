@@ -1,4 +1,4 @@
-import type { Product, Enquiry, Order } from './types'
+import type { Product } from './types'
 
 export const products: Product[] = [
   // Trading Products
@@ -172,55 +172,5 @@ export const products: Product[] = [
     },
     inStock: true,
     featured: false,
-  },
-]
-
-export const mockEnquiries: Enquiry[] = [
-  {
-    id: '1',
-    timestamp: new Date('2024-01-15').toISOString(),
-    name: 'John Anderson',
-    email: 'john@constructionco.com',
-    phone: '+1-555-0101',
-    company: 'Anderson Construction',
-    productInterest: 'Industrial Steel Plate',
-    message: 'Interested in bulk order for upcoming project',
-  },
-  {
-    id: '2',
-    timestamp: new Date('2024-01-18').toISOString(),
-    name: 'Sarah Mitchell',
-    email: 'sarah@techfab.com',
-    phone: '+1-555-0102',
-    company: 'Tech Fabrication Inc',
-    productInterest: 'CNC Turning Services',
-    message: 'Need precision parts for automotive assembly',
-  },
-]
-
-export const mockOrders: Order[] = [
-  {
-    id: '1',
-    timestamp: new Date('2024-01-10').toISOString(),
-    customerName: 'Michael Chen',
-    email: 'michael@industrial.com',
-    phone: '+1-555-0103',
-    company: 'Industrial Solutions Ltd',
-    product: 'Industrial Pipe Systems',
-    quantity: 50,
-    deliveryAddress: '123 Industrial Park, NY 10001',
-    status: 'shipped',
-  },
-  {
-    id: '2',
-    timestamp: new Date('2024-01-20').toISOString(),
-    customerName: 'Emma Rodriguez',
-    email: 'emma@manufact.com',
-    phone: '+1-555-0104',
-    company: 'Manufacturing Experts',
-    product: 'Metal Stamping',
-    quantity: 5000,
-    deliveryAddress: '456 Factory Ave, CA 90001',
-    status: 'processing',
   },
 ]

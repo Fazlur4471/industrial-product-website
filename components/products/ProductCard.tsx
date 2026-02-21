@@ -11,6 +11,8 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
+  const imageSrc = product.images?.[0] || '/images/steel-plate.jpg'
+
   return (
     <motion.div
       whileHover={{ y: -4 }}
@@ -21,7 +23,7 @@ export function ProductCard({ product }: ProductCardProps) {
           {/* Image Container */}
           <div className="relative h-48 bg-secondary overflow-hidden">
             <Image
-              src={product.images[0]}
+              src={imageSrc}
               alt={product.name}
               fill
               className="object-cover hover:scale-110 transition-transform duration-300"

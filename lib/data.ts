@@ -41,7 +41,7 @@ export async function getProductsByCategory(category: string) {
     .from('products')
     .select('*')
     .eq('category', category)
-    .order('featured', { ascending: false })
+    .order('created_at', { ascending: false })
 
   if (error) {
     console.error('Error fetching products by category:', error)
@@ -57,7 +57,7 @@ export async function getFeaturedProducts() {
   const { data, error } = await supabase
     .from('products')
     .select('*')
-    .eq('featured', true)
+    .order('created_at', { ascending: false })
     .limit(6)
 
   if (error) {

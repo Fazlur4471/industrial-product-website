@@ -109,12 +109,24 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
     return Response.json({ error: 'Invalid update payload' }, { status: 400 })
   }
 
-  const { data, error } = await supabase
+  let { data, error } = await supabase
     .from('products')
     .update(payload)
     .eq('id', id)
     .select()
     .single()
+
+  if (error?.code === '42703' && error.message.includes('featured')) {
+    const { featured: _featured, ...withoutFeatured } = payload
+    const retry = await supabase
+      .from('products')
+      .update(withoutFeatured)
+      .eq('id', id)
+      .select()
+      .single()
+    data = retry.data
+    error = retry.error
+  }
 
   if (error) {
     return Response.json({ error: error.message }, { status: 400 })

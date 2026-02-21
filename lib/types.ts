@@ -15,7 +15,7 @@ export interface Product {
     [key: string]: string | number
   }
   inStock: boolean
-  featured: boolean
+  featured?: boolean
   created_at?: string
   updated_at?: string
 }

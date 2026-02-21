@@ -1,10 +1,11 @@
 'use client'
 
-import { type FormEvent, useMemo, useState } from 'react'
+import { type ChangeEvent, type FormEvent, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
-import { Pencil, Plus, Trash2, X } from 'lucide-react'
+import { Loader2, Pencil, Plus, Trash2, Upload, X } from 'lucide-react'
 import type { Product } from '@/lib/types'
+import { createClient as createSupabaseClient } from '@/lib/supabase/client'
 
 interface Props {
   products: Product[]
@@ -62,13 +63,18 @@ function productToForm(product: Product): ProductFormState {
 
 export default function ProductsClient({ products }: Props) {
   const router = useRouter()
+  const supabase = createSupabaseClient()
   const [items, setItems] = useState(products)
   const [formState, setFormState] = useState<ProductFormState>(defaultFormState)
   const [isFormOpen, setIsFormOpen] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isUploadingImages, setIsUploadingImages] = useState(false)
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [error, setError] = useState('')
+  const [uploadError, setUploadError] = useState('')
+
+  const imageBucket = process.env.NEXT_PUBLIC_SUPABASE_PRODUCT_IMAGES_BUCKET ?? 'product-images'
 
   const headingText = useMemo(
     () => (editingId ? 'Edit Product' : 'Create Product'),
@@ -116,6 +122,53 @@ export default function ProductsClient({ products }: Props) {
       setError(deleteError instanceof Error ? deleteError.message : 'Failed to delete product')
     } finally {
       setDeletingId(null)
+    }
+  }
+
+  const handleImageFileUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files
+    if (!files || files.length === 0) return
+
+    setIsUploadingImages(true)
+    setUploadError('')
+
+    try {
+      const uploadedUrls: string[] = []
+
+      for (const file of Array.from(files)) {
+        const cleanName = file.name.replace(/\s+/g, '-').toLowerCase()
+        const path = `products/${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${cleanName}`
+
+        const { error: uploadErrorResponse } = await supabase.storage
+          .from(imageBucket)
+          .upload(path, file, { upsert: false })
+
+        if (uploadErrorResponse) {
+          throw new Error(uploadErrorResponse.message)
+        }
+
+        const { data } = supabase.storage.from(imageBucket).getPublicUrl(path)
+        if (!data.publicUrl) {
+          throw new Error('Could not get image public URL after upload')
+        }
+
+        uploadedUrls.push(data.publicUrl)
+      }
+
+      setFormState((prev) => {
+        const existing = prev.imagesText.trim()
+        const combined = existing ? `${existing}\n${uploadedUrls.join('\n')}` : uploadedUrls.join('\n')
+        return { ...prev, imagesText: combined }
+      })
+    } catch (uploadErrorValue) {
+      setUploadError(
+        uploadErrorValue instanceof Error
+          ? `Upload failed: ${uploadErrorValue.message}`
+          : 'Upload failed'
+      )
+    } finally {
+      setIsUploadingImages(false)
+      event.target.value = ''
     }
   }
 
@@ -306,6 +359,26 @@ export default function ProductsClient({ products }: Props) {
                 <label className="mb-1 block text-sm font-medium text-foreground">
                   Images (comma or new line)
                 </label>
+                <div className="mb-2">
+                  <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-border bg-secondary px-3 py-2 text-sm text-foreground transition-colors hover:bg-secondary/80">
+                    {isUploadingImages ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
+                    {isUploadingImages ? 'Uploading...' : 'Upload from device'}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={handleImageFileUpload}
+                      disabled={isUploadingImages}
+                      className="hidden"
+                    />
+                  </label>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Uploads to Supabase Storage bucket: <span className="font-medium">{imageBucket}</span>
+                  </p>
+                  {uploadError ? (
+                    <p className="mt-1 text-xs text-red-300">{uploadError}</p>
+                  ) : null}
+                </div>
                 <textarea
                   rows={4}
                   value={formState.imagesText}

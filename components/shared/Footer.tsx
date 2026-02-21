@@ -71,10 +71,15 @@ export function Footer() {
               </li>
               <li className="flex items-start gap-2">
                 <MapPin size={16} className="mt-0.5" />
-                <span>
+                <a
+                  href="https://maps.app.goo.gl/dkx33PeJxUZ3nex88"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-foreground transition-colors"
+                >
                   No-30, Yerikadu, New Bus Stand Rd, next to kattabomman hospit, behind Veerapandiyar
                   nagar, Meyyanur, Salem, Tamil Nadu 636004
-                </span>
+                </a>
               </li>
             </ul>
           </div>

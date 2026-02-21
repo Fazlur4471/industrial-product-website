@@ -11,7 +11,6 @@ export function Header() {
   const navItems = [
     { label: 'Trading', href: '/trading' },
     { label: 'Manufacturing', href: '/manufacturing' },
-    { label: 'Admin', href: '/admin/products' },
   ]
 
   return (
@@ -21,9 +20,9 @@ export function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
             <div className="w-8 h-8 bg-accent rounded flex items-center justify-center">
-              <span className="text-accent-foreground font-bold">FM</span>
+              <span className="text-accent-foreground font-bold">ME</span>
             </div>
-            <span className="font-bold text-lg hidden sm:inline">Fast-Map</span>
+            <span className="font-bold text-lg hidden sm:inline">Maharaja Electronics</span>
           </Link>
 
           {/* Desktop Navigation */}

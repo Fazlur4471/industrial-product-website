@@ -60,7 +60,8 @@ export function HeroSection() {
               variants={itemVariants}
               className="text-lg md:text-xl text-muted-foreground mb-8 text-balance leading-relaxed"
             >
-              Discover premium industrial products for trading and manufacturing. Fast-Map delivers quality solutions backed by decades of industry expertise.
+              Discover premium industrial products for trading and manufacturing. Maharaja Electronics
+              delivers quality solutions backed by decades of industry expertise.
             </motion.p>
 
             <motion.div

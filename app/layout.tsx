@@ -12,8 +12,9 @@ const poppins = Poppins({
 const _geistMono = Geist_Mono({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Industrial Products - Premium Trading & Manufacturing Solutions',
-  description: 'Discover premium industrial products for trading and manufacturing. Fast-Map delivers quality solutions for your business needs.',
+  title: 'Maharaja Electronics - Premium Trading & Manufacturing Solutions',
+  description:
+    'Discover premium industrial products for trading and manufacturing. Maharaja Electronics delivers quality solutions for your business needs.',
   generator: 'v0.app',
 }
 

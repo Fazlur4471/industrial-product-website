@@ -4,7 +4,7 @@ import { EnquiryForm } from '@/components/forms/EnquiryForm'
 import { motion } from 'framer-motion'
 
 export const metadata = {
-  title: 'Product Enquiry - Fast-Map',
+  title: 'Product Enquiry - Maharaja Electronics',
   description: 'Submit your product enquiry and our team will contact you with detailed information.',
 }
 

@@ -1,5 +1,5 @@
 import { createClient } from './supabase/server'
-import type { Product, Enquiry, Order } from './types'
+import type { AdminActivity, AdminDashboardData, Enquiry, Order, Product } from './types'
 
 export async function getProducts() {
   const supabase = await createClient()
@@ -98,6 +98,82 @@ export async function getAllOrders() {
   }
 
   return data as Order[]
+}
+
+export async function getAdminDashboardData(): Promise<AdminDashboardData> {
+  const supabase = await createClient()
+
+  const [
+    productsCountResult,
+    ordersCountResult,
+    enquiriesCountResult,
+    pendingOrdersCountResult,
+    newEnquiriesCountResult,
+    recentProductsResult,
+    recentOrdersResult,
+    recentEnquiriesResult,
+  ] = await Promise.all([
+    supabase.from('products').select('*', { count: 'exact', head: true }),
+    supabase.from('orders').select('*', { count: 'exact', head: true }),
+    supabase.from('enquiries').select('*', { count: 'exact', head: true }),
+    supabase.from('orders').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+    supabase.from('enquiries').select('*', { count: 'exact', head: true }).eq('status', 'new'),
+    supabase
+      .from('products')
+      .select('id, name, category, created_at')
+      .order('created_at', { ascending: false })
+      .limit(5),
+    supabase
+      .from('orders')
+      .select('id, name, product, status, created_at')
+      .order('created_at', { ascending: false })
+      .limit(5),
+    supabase
+      .from('enquiries')
+      .select('id, name, productInterest, status, created_at')
+      .order('created_at', { ascending: false })
+      .limit(5),
+  ])
+
+  const activities: AdminActivity[] = [
+    ...((recentProductsResult.data ?? []).map((product) => ({
+      id: product.id,
+      type: 'product' as const,
+      title: `Product added: ${product.name}`,
+      subtitle: `${product.category} category`,
+      created_at: product.created_at ?? new Date(0).toISOString(),
+      href: '/admin/products',
+    }))),
+    ...((recentOrdersResult.data ?? []).map((order) => ({
+      id: order.id,
+      type: 'order' as const,
+      title: `Order from ${order.name}`,
+      subtitle: `${order.product}`,
+      status: order.status,
+      created_at: order.created_at ?? new Date(0).toISOString(),
+      href: '/admin/orders',
+    }))),
+    ...((recentEnquiriesResult.data ?? []).map((enquiry) => ({
+      id: enquiry.id,
+      type: 'enquiry' as const,
+      title: `Enquiry from ${enquiry.name}`,
+      subtitle: `${enquiry.productInterest}`,
+      status: enquiry.status,
+      created_at: enquiry.created_at ?? new Date(0).toISOString(),
+      href: '/admin/enquiries',
+    }))),
+  ]
+    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+    .slice(0, 10)
+
+  return {
+    totalProducts: productsCountResult.count ?? 0,
+    totalOrders: ordersCountResult.count ?? 0,
+    totalEnquiries: enquiriesCountResult.count ?? 0,
+    pendingOrders: pendingOrdersCountResult.count ?? 0,
+    newEnquiries: newEnquiriesCountResult.count ?? 0,
+    recentActivity: activities,
+  }
 }
 
 export async function createEnquiry(enquiry: Omit<Enquiry, 'id' | 'created_at'>) {

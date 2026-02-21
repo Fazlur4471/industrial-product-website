@@ -36,11 +36,20 @@ export function ProductShowcase() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-      <ProductGrid
-        products={products}
-        title="Featured Products"
-        subtitle="Explore our premium industrial solutions"
-      />
+      {products.length === 0 ? (
+        <div className="rounded-xl border border-border bg-card p-10 text-center">
+          <h2 className="text-2xl font-bold text-foreground">Products Coming Soon</h2>
+          <p className="mt-2 text-muted-foreground">
+            No products are published yet. Add products from the admin panel to display them here.
+          </p>
+        </div>
+      ) : (
+        <ProductGrid
+          products={products}
+          title="Featured Products"
+          subtitle="Explore our premium industrial solutions"
+        />
+      )}
     </div>
   )
 }

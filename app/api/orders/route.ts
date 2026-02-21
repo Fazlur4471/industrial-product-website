@@ -28,7 +28,7 @@ export async function POST(request: Request) {
       .from('orders')
       .insert([
         {
-          customerName: data.customerName,
+          name: data.name ?? data.customerName,
           email: data.email,
           phone: data.phone,
           company: data.company,

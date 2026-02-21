@@ -1,7 +1,7 @@
 import { Sidebar } from '@/components/admin/Sidebar'
 
 export const metadata = {
-  title: 'Admin Dashboard - Fast-Map',
+  title: 'Admin Dashboard - Maharaja Electronics',
   description: 'Manage products, enquiries, and orders',
 }
 

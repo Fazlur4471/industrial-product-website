@@ -10,9 +10,9 @@ export function Footer() {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <div className="w-8 h-8 bg-accent rounded flex items-center justify-center">
-                <span className="text-accent-foreground font-bold text-sm">FM</span>
+                <span className="text-accent-foreground font-bold text-sm">ME</span>
               </div>
-              <span className="font-bold">Fast-Map</span>
+              <span className="font-bold">Maharaja Electronics</span>
             </div>
             <p className="text-sm text-muted-foreground">
               Premium industrial solutions for trading and manufacturing.
@@ -59,19 +59,22 @@ export function Footer() {
             <ul className="space-y-3 text-sm text-muted-foreground">
               <li className="flex items-center gap-2">
                 <Phone size={16} />
-                <a href="tel:+1-555-0100" className="hover:text-foreground transition-colors">
-                  +1-555-0100
+                <a href="tel:+919843114920" className="hover:text-foreground transition-colors">
+                  +91 98431 14920
                 </a>
               </li>
               <li className="flex items-center gap-2">
                 <Mail size={16} />
-                <a href="mailto:info@fastmap.com" className="hover:text-foreground transition-colors">
-                  info@fastmap.com
+                <a href="mailto:slmmaharaja@gmail.com" className="hover:text-foreground transition-colors">
+                  slmmaharaja@gmail.com
                 </a>
               </li>
               <li className="flex items-start gap-2">
                 <MapPin size={16} className="mt-0.5" />
-                <span>123 Industrial Way, NY 10001</span>
+                <span>
+                  No-30, Yerikadu, New Bus Stand Rd, next to kattabomman hospit, behind Veerapandiyar
+                  nagar, Meyyanur, Salem, Tamil Nadu 636004
+                </span>
               </li>
             </ul>
           </div>
@@ -79,7 +82,7 @@ export function Footer() {
 
         {/* Bottom */}
         <div className="border-t border-border pt-8 flex flex-col sm:flex-row justify-between items-center text-sm text-muted-foreground">
-          <p>&copy; 2024 Fast-Map. All rights reserved.</p>
+          <p>&copy; 2026 Maharaja Electronics. All rights reserved.</p>
           <div className="flex gap-6 mt-4 sm:mt-0">
             <Link href="#privacy" className="hover:text-foreground transition-colors">
               Privacy Policy

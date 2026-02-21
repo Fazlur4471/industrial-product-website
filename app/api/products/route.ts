@@ -1,5 +1,4 @@
 import { createClient } from '@/lib/supabase/server'
-import { fallbackProducts } from '@/lib/fallback-products'
 
 export async function GET() {
   try {
@@ -9,14 +8,10 @@ export async function GET() {
       .select('*')
       .order('featured', { ascending: false })
 
-    if (error || !data || data.length === 0) {
-      console.log('Using fallback products')
-      return Response.json(fallbackProducts)
-    }
-    
-    return Response.json(data)
+    if (error) throw error
+    return Response.json(data ?? [])
   } catch (error) {
     console.error('Error fetching products:', error)
-    return Response.json(fallbackProducts)
+    return Response.json({ error: 'Failed to fetch products' }, { status: 500 })
   }
 }

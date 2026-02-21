@@ -3,8 +3,8 @@ import { Footer } from '@/components/shared/Footer'
 import { OrderForm } from '@/components/forms/OrderForm'
 
 export const metadata = {
-  title: 'Place an Order - Fast-Map',
-  description: 'Place your order directly with Fast-Map for fast and reliable delivery.',
+  title: 'Place an Order - Maharaja Electronics',
+  description: 'Place your order directly with Maharaja Electronics for fast and reliable delivery.',
 }
 
 export default function OrderPage() {

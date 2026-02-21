@@ -1,11 +1,13 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { Package, FileText, ShoppingCart, Menu, X } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
+import { Package, FileText, ShoppingCart, Menu, X, LayoutDashboard, LogOut } from 'lucide-react'
 import { useState } from 'react'
+import { createClient } from '@/lib/supabase/client'
 
 const navItems = [
+  { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { label: 'Products', href: '/admin/products', icon: Package },
   { label: 'Enquiries', href: '/admin/enquiries', icon: FileText },
   { label: 'Orders', href: '/admin/orders', icon: ShoppingCart },
@@ -13,7 +15,22 @@ const navItems = [
 
 export function Sidebar() {
   const pathname = usePathname()
+  const router = useRouter()
   const [isOpen, setIsOpen] = useState(false)
+  const [isLoggingOut, setIsLoggingOut] = useState(false)
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true)
+
+    try {
+      const supabase = createClient()
+      await supabase.auth.signOut()
+      router.push('/login')
+      router.refresh()
+    } finally {
+      setIsLoggingOut(false)
+    }
+  }
 
   return (
     <>
@@ -32,17 +49,18 @@ export function Sidebar() {
         }`}
       >
         <div className="p-6">
-          <Link href="/admin/products" className="flex items-center gap-2 mb-8">
+          <Link href="/admin" className="flex items-center gap-2 mb-8">
             <div className="w-8 h-8 bg-sidebar-accent rounded flex items-center justify-center">
-              <span className="text-sidebar-accent-foreground font-bold text-sm">FM</span>
+              <span className="text-sidebar-accent-foreground font-bold text-sm">ME</span>
             </div>
-            <span className="font-bold text-sidebar-foreground">Fast-Map</span>
+            <span className="font-bold text-sidebar-foreground">Maharaja Electronics</span>
           </Link>
 
           <nav className="space-y-2">
             {navItems.map((item) => {
               const Icon = item.icon
-              const isActive = pathname === item.href
+              const isActive =
+                item.href === '/admin' ? pathname === '/admin' : pathname.startsWith(item.href)
 
               return (
                 <Link
@@ -64,6 +82,14 @@ export function Sidebar() {
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-sidebar-border">
+          <button
+            onClick={handleLogout}
+            disabled={isLoggingOut}
+            className="mb-3 flex w-full items-center justify-center gap-2 rounded-lg border border-sidebar-border px-3 py-2 text-sm text-sidebar-foreground transition-colors hover:bg-sidebar-accent disabled:opacity-60"
+          >
+            <LogOut size={16} />
+            {isLoggingOut ? 'Logging out...' : 'Logout'}
+          </button>
           <p className="text-xs text-sidebar-foreground/60">Admin Panel v1.0</p>
         </div>
       </aside>

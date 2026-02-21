@@ -63,7 +63,7 @@ export function OrderForm() {
   const handleWhatsApp = () => {
     const message = `Hello, I've placed an order for ${formData.product} (Qty: ${formData.quantity}). Customer: ${formData.customerName}, Phone: ${formData.phone}`
     const encodedMessage = encodeURIComponent(message)
-    window.open(`https://wa.me/?text=${encodedMessage}`, '_blank')
+    window.open(`https://wa.me/919843114920?text=${encodedMessage}`, '_blank')
   }
 
   if (submitted) {

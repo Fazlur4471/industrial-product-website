@@ -59,7 +59,7 @@ export function EnquiryForm() {
   const handleWhatsApp = () => {
     const message = `Hello, I'm interested in ${formData.productInterest || 'your products'}. Name: ${formData.name}, Company: ${formData.company}, Phone: ${formData.phone}`
     const encodedMessage = encodeURIComponent(message)
-    window.open(`https://wa.me/?text=${encodedMessage}`, '_blank')
+    window.open(`https://wa.me/919843114920?text=${encodedMessage}`, '_blank')
   }
 
   if (submitted) {
